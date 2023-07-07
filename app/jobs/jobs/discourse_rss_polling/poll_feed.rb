@@ -81,10 +81,11 @@ module Jobs
         return [] if parsed_feed.blank?
 
         parsed_feed.items.map do |item|
+          title = item.title
           description = item.description
           link = item.link
 
-          ::DiscourseRssPolling::FeedItem.new(description: description, link: link)
+          ::DiscourseRssPolling::FeedItem.new(title: title, description: description, link: link)
         end
       rescue RSS::NotWellFormedError, RSS::InvalidRSSError
         []
