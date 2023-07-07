@@ -61,18 +61,6 @@ module Jobs
         end
       end
 
-      # def topics_polled_from_feed
-      #   raw_feed = fetch_raw_feed
-      #   return [] if raw_feed.blank?
-
-      #   parsed_feed = RSS::Parser.parse(raw_feed, false)
-      #   return [] if parsed_feed.blank?
-
-      #   parsed_feed.items.map { |item| ::DiscourseRssPolling::FeedItem.new(item) }
-      # rescue RSS::NotWellFormedError, RSS::InvalidRSSError
-      #   []
-      # end
-
       def topics_polled_from_feed
         raw_feed = fetch_raw_feed
         return [] if raw_feed.blank?
@@ -80,16 +68,28 @@ module Jobs
         parsed_feed = RSS::Parser.parse(raw_feed, false)
         return [] if parsed_feed.blank?
 
-        parsed_feed.items.map do |item|
-          title = item.title
-          description = item.description
-          link = item.link
-
-          ::DiscourseRssPolling::FeedItem.new(title: title, description: description, link: link)
-        end
+        parsed_feed.items.map { |item| ::DiscourseRssPolling::FeedItem.new(item) }
       rescue RSS::NotWellFormedError, RSS::InvalidRSSError
         []
       end
+
+      # def topics_polled_from_feed
+      #   raw_feed = fetch_raw_feed
+      #   return [] if raw_feed.blank?
+
+      #   parsed_feed = RSS::Parser.parse(raw_feed, false)
+      #   return [] if parsed_feed.blank?
+
+      #   parsed_feed.items.map do |item|
+      #     title = item.title
+      #     description = item.description
+      #     link = item.link
+
+      #     ::DiscourseRssPolling::FeedItem.new(title: title, description: description, link: link)
+      #   end
+      # rescue RSS::NotWellFormedError, RSS::InvalidRSSError
+      #   []
+      # end
 
       def fetch_raw_feed
         final_destination = FinalDestination.new(@feed_url)
