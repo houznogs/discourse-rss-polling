@@ -7,7 +7,7 @@ plugins:
   #   [feed_url, author_username]
   rss_polling_feed_setting:
     default: "[]"
-    hidden: true
+    hidden: false
     client: false
 
   rss_polling_frequency:
