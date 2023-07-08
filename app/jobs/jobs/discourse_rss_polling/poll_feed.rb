@@ -48,7 +48,8 @@ module Jobs
             next
           end
 
-          cook_method = topic.is_youtube? ? Post.cook_methods[:regular] : nil
+          # cook_method = topic.is_youtube? ? Post.cook_methods[:regular] : nil
+          cook_method = Post.cook_methods[:raw_html]
 
           doc = Nokogiri::HTML.parse(topic.content, nil, 'utf-8')
           
@@ -74,7 +75,7 @@ module Jobs
             CGI.unescapeHTML(modified_html),
             category_id: discourse_category_id,
             tags: discourse_tags,
-            cook_method: nil,
+            cook_method: cook_method,
           )
         end
       end
