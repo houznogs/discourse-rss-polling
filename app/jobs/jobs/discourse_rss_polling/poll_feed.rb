@@ -51,8 +51,8 @@ module Jobs
           cook_method = topic.is_youtube? ? Post.cook_methods[:regular] : nil
 
           #removes img and small tags 
-          topic.content = "这是视频简介： " + topic.content
-          doc = Nokogiri::HTML(topic.content)
+          modified_content = "这是视频简介： " + topic.content
+          doc = Nokogiri::HTML(modified_content)
           doc.css('img').remove
           doc.css('small').remove
           modified_html = doc.to_html
@@ -65,7 +65,7 @@ module Jobs
             CGI.unescapeHTML(modified_html),
             category_id: discourse_category_id,
             tags: discourse_tags,
-            cook_method: cook_method,
+            cook_method: nil,
           )
         end
       end
