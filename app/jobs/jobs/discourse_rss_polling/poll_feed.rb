@@ -50,9 +50,18 @@ module Jobs
 
           cook_method = topic.is_youtube? ? Post.cook_methods[:regular] : nil
 
+          doc = Nokogiri::HTML.parse(topic.content, nil, 'utf-8')
+          
+          # Find the <iframe> element and move it to the end of the document
+          iframe = doc.at_css('iframe')
+          iframe.unlink
+          doc.at_css('body').add_child(iframe)
+
+          # Find the <p> element and prepend&append
+          p_element = doc.at_css('p')
+          p_element.content = '视频简介： ' + p_element.content + '...'
+
           #removes img and small tags 
-          modified_content = "这是视频简介： " + topic.content
-          doc = Nokogiri::HTML.parse(modified_content, nil, 'utf-8')
           doc.css('img').remove
           doc.css('small').remove
           modified_html = doc.to_html
