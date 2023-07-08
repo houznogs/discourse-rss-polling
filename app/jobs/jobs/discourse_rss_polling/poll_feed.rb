@@ -52,7 +52,7 @@ module Jobs
 
           #removes img and small tags 
           modified_content = "这是视频简介： " + topic.content
-          doc = Nokogiri::HTML(modified_content)
+          doc = Nokogiri::HTML.parse(modified_content, nil, 'utf-8')
           doc.css('img').remove
           doc.css('small').remove
           modified_html = doc.to_html
